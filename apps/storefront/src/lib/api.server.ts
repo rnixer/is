@@ -1,6 +1,7 @@
 import type { Catalog } from '@igh/contracts';
 import { getCookie, setCookie } from '@tanstack/react-start/server';
 import { randomBytes } from 'node:crypto';
+import { mediaUrl } from './media.server';
 const normalizeBaseUrl = (value?: string) =>
   (value || 'http://127.0.0.1:1337').trim().replace(/\/+$/, '');
 const cms = () => normalizeBaseUrl(process.env.STRAPI_URL);
@@ -11,6 +12,7 @@ export async function cmsFetch<T>(path: string, options: RequestInit = {}): Prom
     ...options,
     headers: {
       'content-type': 'application/json',
+      'ngrok-skip-browser-warning': '1',
       'x-storefront-token': token,
       ...options.headers,
     },
@@ -36,18 +38,18 @@ export async function fetchCatalog(): Promise<Catalog> {
     siteUrl: process.env.SITE_URL,
     collections: data.collections?.map((c) => ({
       ...c,
-      image: c.image?.startsWith('/') ? `${cms()}${c.image}` : c.image,
+      image: c.image ? mediaUrl(c.image) : c.image,
     })),
     products: data.products.map((p) => ({
       ...p,
       images: p.images.map((img) => ({
         ...img,
-        src: img.src.startsWith('/') ? `${cms()}${img.src}` : img.src,
+        src: mediaUrl(img.src),
         srcSet: img.srcSet
           ?.split(',')
           .map((entry) => {
             const [src, width] = entry.trim().split(' ');
-            return `${src.startsWith('/') ? cms() + src : src} ${width}`;
+            return `${mediaUrl(src)} ${width}`;
           })
           .join(', '),
       })),
