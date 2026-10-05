@@ -1,0 +1,95 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "reference": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "accessTokenHash": {
+      "type": "string",
+      "private": true
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "requestHash": {
+      "type": "string",
+      "private": true
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING_PAYMENT",
+        "PAID",
+        "EXPIRED",
+        "PAYMENT_REVIEW"
+      ],
+      "default": "PENDING_PAYMENT"
+    },
+    "fulfillmentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "UNFULFILLED",
+        "PACKING",
+        "SHIPPED",
+        "CANCELLED"
+      ],
+      "default": "UNFULFILLED"
+    },
+    "customer": {
+      "type": "json",
+      "private": true
+    },
+    "items": {
+      "type": "json"
+    },
+    "subtotalSatang": {
+      "type": "integer"
+    },
+    "shippingSatang": {
+      "type": "integer",
+      "default": 3000
+    },
+    "totalSatang": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string",
+      "default": "THB"
+    },
+    "expiresAt": {
+      "type": "datetime"
+    },
+    "stripeSessionId": {
+      "type": "string",
+      "unique": true,
+      "private": true
+    },
+    "checkoutUrl": {
+      "type": "text",
+      "private": true
+    },
+    "stripePaymentIntentId": {
+      "type": "string",
+      "private": true
+    },
+    "trackingNumber": {
+      "type": "string"
+    },
+    "paidAt": {
+      "type": "datetime"
+    }
+  }
+}

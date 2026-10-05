@@ -1,0 +1,32 @@
+{
+  "name": "igh-ess-commerce",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n cms,web -c cyan,magenta \"npm run dev -w @igh/cms\" \"npm run dev -w @igh/storefront\"",
+    "dev:web": "npm run dev -w @igh/storefront",
+    "dev:cms": "npm run dev -w @igh/cms",
+    "build": "npm run build -w @igh/storefront && npm run build -w @igh/cms",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "tsx --test tests/*.test.ts",
+    "db:up": "docker compose up -d postgres",
+    "migrate:extract": "python tools/instagram/extract.py",
+    "migrate:images": "node tools/instagram/images.mjs",
+    "migrate:import": "node --env-file=apps/cms/.env tools/instagram/import.mjs",
+    "setup": "node tools/setup.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.0.0",
+    "concurrently": "^9.2.1",
+    "knex": "^3.0.1",
+    "pg": "^8.20.0",
+    "sharp": "^0.34.4",
+    "stripe": "^23.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

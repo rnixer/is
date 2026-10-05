@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reservations",
+  "info": {
+    "singularName": "reservation",
+    "pluralName": "reservations",
+    "displayName": "Reservation"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "orderReference": {
+      "type": "string",
+      "required": true
+    },
+    "sku": {
+      "type": "string",
+      "required": true
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "ACTIVE",
+        "CONSUMED",
+        "RELEASED"
+      ],
+      "default": "ACTIVE"
+    },
+    "expiresAt": {
+      "type": "datetime"
+    }
+  }
+}

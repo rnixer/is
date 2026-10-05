@@ -1,4 +1,14 @@
-# Proposed architecture — approval required
+# Architecture and implementation decisions
+
+The owner-approved direction is now implemented as a local test system. Confirmed rules: every garment is unique; domestic shipping is THB 30 per order; Thailand-only; no exchanges/returns per the supplied policy; yearly hosting target THB 1,000–2,000. A Stripe publishable test key is stored locally; secret/webhook credentials and real provider testing remain outstanding.
+
+The one-SKU catalog simplifies the original proposal: Product holds the reviewed price, measurements and content; Variant holds immutable SKU, productSlug, stock (0/1), reservation count and active status, without draft/publish. Order items/contact/address are immutable JSON snapshots rather than separate child entities. The six implemented content types are Product, Variant, Collection, Order, Reservation and StripeEvent. This keeps native Strapi Admin management practical for the actual one-off merchandise. Operational records have explicit PostgreSQL unique indexes, and raw JSON is normalized for Strapi's PostgreSQL parser configuration.
+
+Current migration: 163 product drafts / 170 selected images from 2026-07-01 through 2026-10-05. 93 captions explicitly say SOLD; their SKU stock is 0. All imports stay NEEDS_REVIEW and inactive until owner review. Public product images are optimized and committed; original private export remains outside the repo. Development preview can inspect drafts/cart, but backend checkout requires published approved products and an active available SKU.
+
+React 18.3.1 is used consistently because Strapi's current peer dependencies require React 18. CMS compilation disables incremental output to avoid missing schemas after a clean build, and a register-time model check refuses startup before database schema synchronization when a required model is missing. Startup, publication, order visibility and consumption were tested against actual Strapi/PostgreSQL.
+
+The remaining sections record the discovery proposal and rationale. Use README, development.md and owner-guide.md for current operating instructions. Production deployment, storage-provider credentials, payment-provider verification, backups and audit remediation are not completed by local implementation.
 
 ## Understanding and discovery
 

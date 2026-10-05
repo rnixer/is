@@ -7,6 +7,16 @@ dist/
 .strapi/
 .cache/
 coverage/
+apps/cms/public/uploads/*
+!apps/cms/public/uploads/.gitkeep
+apps/cms/.tmp/
+apps/cms/build/
+*.tsbuildinfo
+__pycache__/
+test-results/
+playwright-report/
+artifacts/
+audit-production.json
 *.log
 # Raw Instagram exports contain private messages and account information.
 instagram-igh.ess-2026-10-05-LIWwNEpM/

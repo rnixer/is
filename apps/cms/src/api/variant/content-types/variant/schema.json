@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "variants",
+  "info": {
+    "singularName": "variant",
+    "pluralName": "variants",
+    "displayName": "Variant"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "sku": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "productSlug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "stock": {
+      "type": "integer",
+      "default": 1,
+      "min": 0,
+      "max": 1,
+      "required": true
+    },
+    "reserved": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "private": true
+    },
+    "active": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

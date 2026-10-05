@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stripe_events",
+  "info": {
+    "singularName": "stripe-event",
+    "pluralName": "stripe-events",
+    "displayName": "Stripe-event"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "eventId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "eventType": {
+      "type": "string"
+    },
+    "processedAt": {
+      "type": "datetime"
+    }
+  }
+}
