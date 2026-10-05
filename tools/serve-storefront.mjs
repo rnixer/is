@@ -4,9 +4,9 @@ import { Readable } from 'node:stream';
 import { stat } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../apps/storefront');
-const { default: app } = await import(path.join(root, 'dist/server/server.js'));
+const { default: app } = await import(pathToFileURL(path.join(root, 'dist/server/server.js')).href);
 const types = {
   '.js': 'text/javascript',
   '.css': 'text/css',
@@ -15,6 +15,7 @@ const types = {
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
   '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
 };
 const origin = process.env.SITE_URL || `http://localhost:${process.env.PORT || 3000}`;
 const client = path.join(root, 'dist/client');
