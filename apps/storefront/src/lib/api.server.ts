@@ -1,7 +1,9 @@
 import type { Catalog } from '@igh/contracts';
 import { getCookie, setCookie } from '@tanstack/react-start/server';
 import { randomBytes } from 'node:crypto';
-const cms = () => process.env.STRAPI_URL || 'http://127.0.0.1:1337';
+const normalizeBaseUrl = (value?: string) =>
+  (value || 'http://127.0.0.1:1337').trim().replace(/\/+$/, '');
+const cms = () => normalizeBaseUrl(process.env.STRAPI_URL);
 export async function cmsFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = process.env.STOREFRONT_TOKEN;
   if (!token) throw new Error('ยังไม่ได้ตั้งค่าการเชื่อมต่อร้านค้า');
