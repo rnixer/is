@@ -125,11 +125,17 @@ Design: off-white/black, generous spacing, editorial hero and restrained two-col
 6. Polish: editorial/mobile, image performance, SEO, accessibility and end-to-end checkout checks.
 7. Production: approved hosting, secrets, eligible Stripe account, domain, monitoring, backup restore test and explicit launch checks.
 
+## Confirmed business rules
+
+- Each physical garment is unique and has exactly one unit. Model it as its own Product with one purchasable SKU; do not combine garments just because captions share a title. Color and actual measurements describe that garment; do not invent selectable size/color alternatives. Initialize current sellable inventory only after the owner confirms that the garment is still available; one unit per item does not establish that every historical post remains unsold.
+- Thailand domestic shipping is a flat THB 30 (3,000 satang) added to the garment subtotal. Proposed interpretation: per order, subject to owner confirmation. Server computes this charge and snapshots it in the order. Historical free-shipping captions must not override this confirmed current policy.
+- Prevent concurrent payment for the same unique garment through atomic reservation. No multi-unit stock-management UI is needed; availability and reservation consistency remain required.
+
 ## Questions before implementation
 
-- Is stock mainly unique one-off remade garments, repeated styles, or both? Where is current availability recorded?
+- Resolved: every physical garment has one unit. Still needed: which historical exported products remain available today?
 - Resolved: owner confirmed `igh.ess` as the displayed brand name and approved the profile image as logo/icon.
-- Thailand-only V1? Confirm current free-shipping rule and returns/contact policy.
+- Confirm THB 30 is per order rather than per garment; confirm Thailand-only V1 and current returns/contact policy.
 - Does the owner have an eligible Thai Stripe account? What is the monthly infrastructure budget?
 - Confirm architecture before major code generation, as explicitly requested in the supplied brief.
 
