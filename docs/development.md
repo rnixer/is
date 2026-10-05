@@ -36,7 +36,7 @@ STRIPE_MODE=test
 STOREFRONT_URL=http://localhost:3000
 ```
 
-Enable PromptPay and cards on the eligible Thai Stripe account. Forward Stripe test events to `http://localhost:1337/api/stripe/webhook` using Stripe CLI, then place the CLI's webhook signing secret in the CMS environment. Restart CMS. Never paste secret keys into source files or commit them. Development preview lets users inspect drafts and the bag; only published APPROVED products with active, available SKUs can enter backend checkout.
+Enable PromptPay and cards on the eligible Thai Stripe account. Forward Stripe test events to `http://localhost:1337/api/stripe/webhook` using Stripe CLI, then place the CLI's webhook signing secret in the CMS environment. Restart CMS. Never paste secret keys into source files or commit them. Development preview lets users inspect drafts and the bag; only published products with valid prices and available matching SKUs can enter backend checkout.
 
 ## Checks
 

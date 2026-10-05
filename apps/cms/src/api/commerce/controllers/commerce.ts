@@ -15,14 +15,12 @@ const rate = new Map<string, { count: number; reset: number }>();
 export default {
   async catalog(ctx: Context) {
     const preview = process.env.NODE_ENV !== 'production' && ctx.query.preview === 'true';
-    const products = await strapi
-      .documents('api::product.product')
-      .findMany({
-        status: preview ? 'draft' : 'published',
-        populate: ['images', 'collection'],
-        sort: 'postedAt:desc',
-        limit: 1000,
-      });
+    const products = await strapi.documents('api::product.product').findMany({
+      status: preview ? 'draft' : 'published',
+      populate: ['images', 'collection'],
+      sort: 'postedAt:desc',
+      limit: 1000,
+    });
     const collections = await strapi
       .documents('api::collection.collection')
       .findMany({ status: preview ? 'draft' : 'published', populate: ['image'], limit: 100 });
@@ -69,9 +67,11 @@ export default {
             }),
           ),
           available:
-            !!variant?.active &&
+            !!variant &&
             variant.stock - variant.reserved === 1 &&
-            p.reviewState === 'APPROVED' &&
+            variant.productSlug === p.slug &&
+            Number.isSafeInteger(p.priceSatang) &&
+            (p.priceSatang ?? 0) > 0 &&
             !preview,
           published: !!p.publishedAt,
           reviewState: p.reviewState,

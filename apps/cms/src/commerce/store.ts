@@ -84,22 +84,16 @@ export async function reserve(strapi: Core.Strapi, input: CheckoutInput, token: 
       )
       .orderBy('sku')
       .forUpdate();
-    if (
-      rows.length !== normalized.items.length ||
-      rows.some((v) => !v.active || v.stock - v.reserved < 1)
-    )
+    if (rows.length !== normalized.items.length || rows.some((v) => v.stock - v.reserved < 1))
       throw new Error('ITEM_UNAVAILABLE');
     const items: Item[] = [];
     for (const row of rows) {
-      const product = await strapi.db
-        .query('api::product.product')
-        .findOne({
-          where: {
-            slug: row.product_slug,
-            publishedAt: { $notNull: true },
-            reviewState: 'APPROVED',
-          },
-        });
+      const product = await strapi.db.query('api::product.product').findOne({
+        where: {
+          slug: row.product_slug,
+          publishedAt: { $notNull: true },
+        },
+      });
       if (
         !product ||
         product.sku !== row.sku ||
@@ -266,15 +260,13 @@ export async function consumePaidSession(
         .where('id', hold.id)
         .update({ state: 'CONSUMED', updated_at: new Date() });
     }
-    await trx(orders)
-      .where('id', order.id)
-      .update({
-        payment_status: 'PAID',
-        stripe_session_id: session.id,
-        stripe_payment_intent_id: paymentIntentId,
-        paid_at: new Date(),
-        updated_at: new Date(),
-      });
+    await trx(orders).where('id', order.id).update({
+      payment_status: 'PAID',
+      stripe_session_id: session.id,
+      stripe_payment_intent_id: paymentIntentId,
+      paid_at: new Date(),
+      updated_at: new Date(),
+    });
   });
 }
 

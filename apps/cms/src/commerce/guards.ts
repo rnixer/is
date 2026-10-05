@@ -31,27 +31,6 @@ export function registerGuards(strapi: Core.Strapi) {
         'Payment and reservation records are read-only. Use fulfillment fields on orders.',
       );
     }
-    if (model === 'api::product.product' && ctx.action === 'publish') {
-      const product = await strapi
-        .documents('api::product.product')
-        .findOne({
-          documentId: (ctx.params as { documentId: string }).documentId,
-          status: 'draft',
-        });
-      if (
-        !product ||
-        product.reviewState !== 'APPROVED' ||
-        !Number.isSafeInteger(product.priceSatang) ||
-        !product.priceSatang ||
-        product.priceSatang < 1
-      )
-        throw new Error('Approve the product and verify its price before publishing.');
-      const variant = await strapi.db
-        .query('api::variant.variant')
-        .findOne({ where: { sku: product.sku, active: true } });
-      if (!variant || variant.productSlug !== product.slug)
-        throw new Error('Create/activate the matching SKU before publishing.');
-    }
     if (model === 'api::variant.variant' && ['update', 'delete'].includes(ctx.action)) {
       return strapi.db.transaction(async ({ trx }) => {
         const row = await trx(table(strapi, model))

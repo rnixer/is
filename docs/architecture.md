@@ -81,7 +81,7 @@ Owner uses Strapi Admin for products/images/variants and orders. Inventory adjus
 ## API boundaries
 
 - GET published product/collection DTOs with pagination, filters and responsive media metadata.
-- POST checkout: variant IDs, positive integer quantities, customer/address, idempotency key only. Reject unknown fields; server loads published/active SKUs and current prices and computes shipping/totals.
+- POST checkout: variant IDs, positive integer quantities, customer/address, idempotency key only. Reject unknown fields; server loads published products with available matching SKUs and current prices and computes shipping/totals.
 - GET order status: authenticated by opaque guest access token; no sequential-ID lookup or exposed address data.
 - POST Stripe webhook: raw request body and verified Stripe signature; no browser payment mutation.
 - Internal stock adjustment, fulfillment and reconciliation: staff/service authorization only.

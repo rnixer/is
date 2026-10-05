@@ -19,33 +19,19 @@ const before = (
   await app.documents('api::product.product').findMany({ status: 'draft', limit: 1000 })
 ).length;
 try {
-  product = await app
-    .documents('api::product.product')
-    .create({
-      status: 'draft',
-      data: {
-        name: 'Verification fixture',
-        slug,
-        sku,
-        priceSatang: 21100,
-        reviewState: 'NEEDS_REVIEW',
-      },
-    });
+  product = await app.documents('api::product.product').create({
+    status: 'draft',
+    data: {
+      name: 'Verification fixture',
+      slug,
+      sku,
+      priceSatang: 21100,
+      reviewState: 'NEEDS_REVIEW',
+    },
+  });
   variant = await app
     .documents('api::variant.variant')
     .create({ data: { sku, productSlug: slug, stock: 1, reserved: 0, active: false } });
-  await assert.rejects(
-    app.documents('api::product.product').publish({ documentId: product.documentId }),
-  );
-  await app
-    .documents('api::product.product')
-    .update({ documentId: product.documentId, data: { reviewState: 'APPROVED' } });
-  await assert.rejects(
-    app.documents('api::product.product').publish({ documentId: product.documentId }),
-  );
-  await app
-    .documents('api::variant.variant')
-    .update({ documentId: variant.documentId, data: { active: true } });
   await app.documents('api::product.product').publish({ documentId: product.documentId });
   order = await reserve(
     app,
@@ -105,7 +91,7 @@ try {
   assert.equal(stock.stock, 0);
   assert.equal(stock.reserved, 0);
   console.log(
-    'Actual Strapi/PostgreSQL: publication guards, SKU reservation, order Admin visibility, protected payment fields and stock consumption passed.',
+    'Actual Strapi/PostgreSQL: direct publication without approval/activation, SKU reservation, order Admin visibility, protected payment fields and stock consumption passed.',
   );
 } finally {
   if (order) {
