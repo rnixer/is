@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+.output/
+.strapi/
+.cache/
+coverage/
+*.log
+# Raw Instagram exports contain private messages and account information.
+instagram-igh.ess-2026-10-05-LIWwNEpM/
+**/instagram-*/
+data/private/
+data/migration/raw/
+data/migration/drafts/
