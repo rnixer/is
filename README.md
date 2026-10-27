@@ -8,7 +8,7 @@
 
 ## เริ่มรัน
 
-ต้องมี Node 24 และ Docker Desktop ที่เปิดอยู่
+ต้องมี Node 24 และ PostgreSQL ในเครื่อง ตอนนี้เครื่องนี้ย้ายออกจาก Docker แล้ว ดู [วิธีรัน backend](docs/local-backend.md) ข้อมูลอยู่ใน `.local/postgres-data` อย่าลบโฟลเดอร์นี้
 
 ```powershell
 npm.cmd ci
@@ -18,6 +18,7 @@ npm.cmd run dev
 ```
 
 - เว็บ: http://localhost:3000
+- เปิดเฉพาะ backend: `npm.cmd run backend` ไม่ต้องเปิด Docker
 - Strapi Admin: http://localhost:1337/admin — สร้างบัญชีผู้ดูแลครั้งแรกเอง
 - เครื่องใหม่ต้องรัน `npm.cmd run migrate:import` ก่อน โดยหยุด CMS ระหว่าง import
 
@@ -25,6 +26,7 @@ npm.cmd run dev
 
 ## คู่มือ
 
+- [Deploy Render + Supabase และแยก localhost](docs/render-supabase.md)
 - [คู่มือเจ้าของร้าน](docs/owner-guide.md)
 - [ติดตั้ง / นำเข้า / Stripe / ทดสอบ](docs/development.md)
 - [แผนสถาปัตยกรรมต้นทาง](docs/architecture.md)

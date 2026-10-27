@@ -1144,3 +1144,54 @@ svg {
     font-size: 12px;
   }
 }
+.brand img {
+  border-radius: 50%;
+}
+.collections-menu {
+  position: relative;
+}
+.collections-menu > button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+.collections-dropdown {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: -20px;
+  z-index: 30;
+  min-width: 215px;
+  padding: 20px;
+  background: #faf9f6;
+  border: 1px solid #dddcd5;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  box-shadow: 0 12px 24px #0000000a;
+}
+.dropdown-label {
+  color: #73766d;
+  margin-top: 8px;
+}
+.collections-dropdown .dropdown-child {
+  padding-left: 12px;
+}
+.story-page .story-body {
+  grid-template-columns: minmax(0, 780px);
+}
+.story-page .story-tagline {
+  display: inline-block;
+  font-size: clamp(26px, 4vw, 60px);
+}
+@media (max-width: 700px) {
+  .collections-dropdown {
+    position: static;
+    box-shadow: none;
+    margin-top: 16px;
+    min-width: 0;
+  }
+}

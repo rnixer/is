@@ -1,6 +1,6 @@
 # Development and payment setup
 
-Requires Node 24, npm, Python with `pip install -r tools/instagram/requirements.txt`, and Docker Desktop running. PostgreSQL is real, persistent and local; do not delete its volume to reset the application.
+Requires Node 24, npm, Python with `pip install -r tools/instagram/requirements.txt`, and local PostgreSQL 17. This Windows workspace now runs PostgreSQL directly without Docker; see [local backend](local-backend.md). Database files and the migration backup are private under `.local/`. Never delete the data directory to reset the application. The old Docker volume is retained only as a migration fallback.
 
 ```powershell
 npm.cmd ci

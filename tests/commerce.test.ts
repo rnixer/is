@@ -23,6 +23,28 @@ const input = (sku = 'sku-a'): CheckoutInput => ({
   idempotencyKey: randomUUID(),
   customer,
 });
+test('Thai phone formats normalize consistently in browser and backend schemas', () => {
+  for (const schema of [sharedSchema, checkoutSchema]) {
+    for (const phone of [
+      '0871234567',
+      '087-123-4567',
+      '087 123 4567',
+      '+66871234567',
+      '+66 87-123-4567',
+      '0066871234567',
+    ]) {
+      const value = schema.parse({ ...input(), customer: { ...customer, phone } });
+      assert.equal(value.customer.phone, '0871234567');
+    }
+    for (const phone of ['+65871234567', '087abc4567', '087123', '087-___-____']) {
+      assert.equal(
+        schema.safeParse({ ...input(), customer: { ...customer, phone } }).success,
+        false,
+      );
+    }
+  }
+});
+
 test('Checkout rejects browser price/payment fields and duplicate or multi-unit SKUs', () => {
   for (const schema of [sharedSchema, checkoutSchema]) {
     assert.equal(schema.safeParse(input()).success, true);
@@ -123,13 +145,13 @@ before(async () => {
     t.jsonb('items');
     for (const name of ['subtotal_satang', 'shipping_satang', 'total_satang']) t.integer(name);
     for (const name of ['expires_at', 'created_at', 'updated_at', 'paid_at', 'published_at'])
-      t.timestamp(name);
+      t.timestamp(name, { useTz: false });
   });
   await db.schema.withSchema(schema).createTable('reservations', (t) => {
     t.increments('id');
     for (const name of ['document_id', 'order_reference', 'sku', 'state']) t.string(name);
     for (const name of ['expires_at', 'created_at', 'updated_at', 'published_at'])
-      t.timestamp(name);
+      t.timestamp(name, { useTz: false });
     t.unique(['order_reference', 'sku']);
   });
   await db.schema.withSchema(schema).createTable('events', (t) => {
@@ -165,6 +187,11 @@ test('Real PostgreSQL: final garment has one winner, retry is idempotent, bad am
   assert.equal(order.total_satang, 23000);
   assert.equal(order.shipping_satang, 3000);
   const again = await reserve(fake, winner, token);
+  const remaining = new Date(again.expires_at).getTime() - Date.now();
+  assert.ok(
+    remaining > 34 * 60_000 && remaining <= 35 * 60_000,
+    'Hold must expire in 35 minutes in the local timezone',
+  );
   assert.equal(again.reference, order.reference);
   await assert.rejects(
     reserve(fake, { ...winner, customer: { ...customer, name: 'Other buyer' } }, token),

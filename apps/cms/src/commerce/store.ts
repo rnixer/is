@@ -114,6 +114,8 @@ export async function reserve(strapi: Core.Strapi, input: CheckoutInput, token: 
       throw new Error('ORDER_TOO_LARGE');
     const now = new Date(),
       expires = new Date(now.getTime() + 35 * 60 * 1000);
+    // Pass Date objects to pg, just like created_at. ISO strings are interpreted
+    // differently by Strapi's timestamp-without-timezone columns on Windows.
     const reference = randomUUID();
     const [order] = (await trx(orders)
       .insert({
@@ -130,7 +132,7 @@ export async function reserve(strapi: Core.Strapi, input: CheckoutInput, token: 
         subtotal_satang: subtotal,
         shipping_satang: SHIPPING_SATANG,
         total_satang: subtotal + SHIPPING_SATANG,
-        expires_at: expires.toISOString(),
+        expires_at: expires,
         published_at: now,
         created_at: now,
         updated_at: now,
@@ -143,7 +145,7 @@ export async function reserve(strapi: Core.Strapi, input: CheckoutInput, token: 
         order_reference: reference,
         sku: row.sku,
         state: 'ACTIVE',
-        expires_at: expires.toISOString(),
+        expires_at: expires,
         published_at: now,
         created_at: now,
         updated_at: now,

@@ -51,6 +51,8 @@ function Shop() {
               ['all', 'ALL'],
               ['short-sleeve', 'SHORT SLEEVES'],
               ['long-sleeve', 'LONG SLEEVES'],
+              ['custom-design', 'CUSTOM DESIGN'],
+              ['accessories', 'ACCESSORIES'],
               ['other', 'THE DETAILS'],
             ].map(([key, label]) => (
               <button

@@ -37,6 +37,7 @@ export function Icon({ name }: { name: 'bag' | 'search' | 'arrow' | 'close' | 'm
 export function Header() {
   const { skus } = useCart();
   const [open, setOpen] = useState(false);
+  const [collectionsOpen, setCollectionsOpen] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
   return (
     <>
@@ -53,11 +54,7 @@ export function Header() {
           <Icon name={open ? 'close' : 'menu'} />
         </button>
         <nav className={open ? 'nav open' : 'nav'} aria-label="เมนูหลัก">
-          {[
-            ['/shop', 'SHOP'],
-            ['/collections', 'COLLECTIONS'],
-            ['/about', 'OUR STORY'],
-          ].map(([to, label]) => (
+          {[['/shop', 'SHOP']].map(([to, label]) => (
             <Link
               key={to}
               to={to}
@@ -67,6 +64,71 @@ export function Header() {
               {label}
             </Link>
           ))}
+          <div
+            className="collections-menu"
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setCollectionsOpen(false);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                setCollectionsOpen(false);
+                (event.currentTarget.querySelector('button') as HTMLButtonElement)?.focus();
+              }
+            }}
+          >
+            <button
+              type="button"
+              className={path === '/collections' ? 'active' : ''}
+              aria-expanded={collectionsOpen}
+              aria-controls="collection-links"
+              onClick={() => setCollectionsOpen(!collectionsOpen)}
+            >
+              COLLECTIONS <span aria-hidden="true">⌄</span>
+            </button>
+            {collectionsOpen && (
+              <div
+                id="collection-links"
+                className="collections-dropdown"
+                onClick={() => {
+                  setCollectionsOpen(false);
+                  setOpen(false);
+                }}
+              >
+                <Link to="/collections">All collections</Link>
+                <span className="dropdown-label">Crop shirt</span>
+                <Link
+                  className="dropdown-child"
+                  to="/shop"
+                  search={{ category: 'short-sleeve', q: '', sort: 'newest' }}
+                >
+                  Short sleeve
+                </Link>
+                <Link
+                  className="dropdown-child"
+                  to="/shop"
+                  search={{ category: 'long-sleeve', q: '', sort: 'newest' }}
+                >
+                  Long sleeve
+                </Link>
+                <Link to="/shop" search={{ category: 'custom-design', q: '', sort: 'newest' }}>
+                  Custom design
+                </Link>
+                <Link to="/shop" search={{ category: 'accessories', q: '', sort: 'newest' }}>
+                  Accessories
+                </Link>
+              </div>
+            )}
+          </div>
+          <Link
+            to="/about"
+            className={path === '/about' ? 'active' : ''}
+            onClick={() => {
+              setOpen(false);
+              setCollectionsOpen(false);
+            }}
+          >
+            OUR STORY
+          </Link>
         </nav>
         <Link to="/" className="brand" aria-label="igh.ess หน้าแรก">
           <img src="/images/brand/logo.webp" width="38" height="38" alt="" />

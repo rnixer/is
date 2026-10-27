@@ -479,7 +479,9 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    category: Schema.Attribute.Enumeration<['short-sleeve', 'long-sleeve', 'other']> &
+    category: Schema.Attribute.Enumeration<
+      ['short-sleeve', 'long-sleeve', 'custom-design', 'accessories', 'other']
+    > &
       Schema.Attribute.DefaultTo<'other'>;
     collection: Schema.Attribute.Relation<'manyToOne', 'api::collection.collection'>;
     createdAt: Schema.Attribute.DateTime;

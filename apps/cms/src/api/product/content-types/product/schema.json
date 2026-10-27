@@ -32,11 +32,7 @@
     },
     "category": {
       "type": "enumeration",
-      "enum": [
-        "short-sleeve",
-        "long-sleeve",
-        "other"
-      ],
+      "enum": ["short-sleeve", "long-sleeve", "custom-design", "accessories", "other"],
       "default": "other"
     },
     "material": {
@@ -48,16 +44,11 @@
     "images": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "reviewState": {
       "type": "enumeration",
-      "enum": [
-        "NEEDS_REVIEW",
-        "APPROVED"
-      ],
+      "enum": ["NEEDS_REVIEW", "APPROVED"],
       "default": "NEEDS_REVIEW"
     },
     "postedAt": {

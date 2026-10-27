@@ -12,7 +12,19 @@ export const checkoutSchema = z
       .object({
         name: z.string().trim().min(2).max(120),
         email: z.email().max(254),
-        phone: z.string().regex(/^0[0-9]{8,9}$/, 'กรุณากรอกเบอร์โทรศัพท์ไทย'),
+        phone: z
+          .string()
+          .trim()
+          .max(40)
+          .transform((value) => value.replace(/[\s()-]/g, '').replace(/^(?:\+66|0066)/, '0'))
+          .pipe(
+            z
+              .string()
+              .regex(
+                /^0[0-9]{8,9}$/,
+                'กรุณากรอกเบอร์โทรศัพท์ไทย เช่น 087-123-4567 หรือ +66871234567',
+              ),
+          ),
         address: z.string().trim().min(5).max(300),
         subdistrict: z.string().trim().min(1).max(100),
         district: z.string().trim().min(1).max(100),

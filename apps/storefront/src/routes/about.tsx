@@ -8,20 +8,21 @@ function About() {
     <main className="story-page section">
       <span className="eyebrow">IGH.ESS / OUR STORY</span>
       <h1>
-        Good pieces.
+        “IS”
         <br />
-        <em>New possibilities.</em>
+        <em className="story-tagline">because everything can still be.</em>
       </h1>
       <div className="story-body">
-        <img src="/images/brand/logo.webp" width="140" height="140" alt="โลโก้ igh.ess" />
         <div>
-          <h2>ชิ้นเดิม เรื่องราวใหม่</h2>
+          <h2>igh-ess-IS อ่านว่า “อีส”</h2>
+          <p>เพราะเราเชื่อว่าทุกสิ่ง “มีตัวตน” และ “มีความเป็นไปได้” มากกว่าหนึ่งแบบ</p>
           <p>
-            igh.ess นำเสื้อมือสองมารีเมคเป็นทรงครอป ให้เสื้อแต่ละชิ้นได้เริ่มต้นอีกครั้งในมุมมองใหม่
+            เรานำเสื้อผ้าเดิมที่ไม่ใช้แล้ว สุดท้ายกลายเป็นถูกลืมและไม่เหลือคุณค่า
+            มาสร้างสรรค์และพัฒนาใหม่ให้กลายเป็นผลิตภัณฑ์ที่มีคุณค่ามากขึ้น
           </p>
           <p>
-            เราซัก อบ รีด และฆ่าเชื้อให้พร้อมใส่ เสื้อแต่ละชิ้นมีเพียงตัวเดียว
-            พร้อมขนาดจริงให้คุณเลือกชิ้นที่เหมาะกับตัวเอง
+            เราจึงเปลี่ยนสิ่งที่กำลังจะถูกโยนทิ้ง ให้กลายเป็นอีกสิ่งหนึ่ง ที่ยัง “ไปต่อได้”
+            ในเวอร์ชั่นใหม่อีกครั้ง.
           </p>
           <Link to="/shop" className="text-link">
             EXPLORE THE PIECES →
