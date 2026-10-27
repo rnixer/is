@@ -1,3 +1,6 @@
+@import 'tailwindcss/theme';
+@import 'tailwindcss/utilities';
+
 @font-face {
   font-family: 'DM Sans';
   src: url('/fonts/dm-sans.ttf') format('truetype');
@@ -1145,7 +1148,7 @@ svg {
   }
 }
 .brand img {
-  border-radius: 50%;
+  @apply rounded-full shadow-md;
 }
 .collections-menu {
   position: relative;
