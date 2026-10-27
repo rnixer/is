@@ -270,6 +270,24 @@ export async function consumePaidSession(
       updated_at: new Date(),
     });
   });
+
+  // Keep the sold one-of-a-kind piece in Strapi as a draft, but remove it from
+  // the public catalogue as soon as the verified payment is committed.
+  const paidOrderRow = await strapi.db
+    .connection<RawOrderRow>(orders)
+    .where('reference', session.metadata?.orderReference || '')
+    .first();
+  if (!paidOrderRow || paidOrderRow.payment_status !== 'PAID') return;
+  const paidOrder = normalizeOrder(paidOrderRow);
+  for (const item of paidOrder.items) {
+    const [product] = await strapi.documents('api::product.product').findMany({
+      status: 'published',
+      filters: { sku: item.sku },
+      limit: 1,
+    });
+    if (product)
+      await strapi.documents('api::product.product').unpublish({ documentId: product.documentId });
+  }
 }
 
 export async function releaseExpired(strapi: Core.Strapi, reference: string) {

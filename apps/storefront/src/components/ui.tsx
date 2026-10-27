@@ -234,9 +234,7 @@ export function ProductCard({
       <p className="product-note">
         {preview
           ? 'รอเจ้าของร้านตรวจสอบ'
-          : product.available
-            ? 'ONE UNIQUE PIECE'
-            : 'ไม่พร้อมจำหน่าย'}
+          : 'ONE UNIQUE PIECE'}
       </p>
     </article>
   );

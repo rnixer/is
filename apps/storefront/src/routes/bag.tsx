@@ -42,7 +42,7 @@ function Bag() {
                     </Link>
                     <p>{money(p.priceSatang || 0)}</p>
                     <small>จำนวน 1 · แต่ละชิ้นมีเพียงตัวเดียว</small>
-                    {!p.available && <p className="error">สินค้าชิ้นนี้ไม่พร้อมจำหน่าย</p>}
+                    {!p.available && <p className="error">สินค้าชิ้นนี้ถูกเก็บออกจากหน้าร้านแล้ว</p>}
                     <button className="remove" onClick={() => cart.remove(p.sku)}>
                       นำออก
                     </button>
@@ -73,7 +73,7 @@ function Bag() {
               </div>
             </dl>
             {unavailable ? (
-              <p className="error">กรุณานำสินค้าที่ไม่พร้อมจำหน่ายออกก่อน</p>
+              <p className="error">กรุณานำสินค้าที่ถูกเก็บออกจากหน้าร้านออกก่อน</p>
             ) : (
               <Link to="/checkout" className="button dark">
                 CHECKOUT <Icon name="arrow" />

@@ -25,6 +25,51 @@ export default {
       .documents('api::collection.collection')
       .findMany({ status: preview ? 'draft' : 'published', populate: ['image'], limit: 100 });
     const variants = await strapi.db.query('api::variant.variant').findMany({});
+    const catalogProducts = products.map((p) => {
+      const variant = variants.find((v) => v.sku === p.sku);
+      return {
+        id: p.documentId,
+        slug: p.slug,
+        sku: p.sku,
+        name: p.name,
+        description: p.description || '',
+        priceSatang: p.priceSatang || null,
+        collection: p.collection?.slug,
+        category: p.category || 'other',
+        material: p.material || null,
+        measurements: p.measurements || {},
+        images: (p.images || []).map(
+          (img: {
+            url: string;
+            width?: number;
+            height?: number;
+            alternativeText?: string;
+            formats?: Record<string, { url: string; width: number }>;
+          }) => ({
+            src: img.url,
+            width: img.width || 1000,
+            height: img.height || 1200,
+            alt: img.alternativeText || p.name,
+            srcSet: [
+              ...Object.values(img.formats || {})
+                .filter((f) => f.width >= 400)
+                .map((f) => `${f.url} ${f.width}w`),
+              `${img.url} ${img.width || 1000}w`,
+            ].join(', '),
+          }),
+        ),
+        available:
+          !!variant &&
+          variant.stock - variant.reserved === 1 &&
+          variant.productSlug === p.slug &&
+          Number.isSafeInteger(p.priceSatang) &&
+          (p.priceSatang ?? 0) > 0 &&
+          !preview,
+        published: !!p.publishedAt,
+        reviewState: p.reviewState,
+        postedAt: p.postedAt,
+      };
+    });
     ctx.body = {
       preview,
       collections: collections.map((c) => ({
@@ -33,51 +78,7 @@ export default {
         description: c.description || '',
         image: c.image?.url || null,
       })),
-      products: products.map((p) => {
-        const variant = variants.find((v) => v.sku === p.sku);
-        return {
-          id: p.documentId,
-          slug: p.slug,
-          sku: p.sku,
-          name: p.name,
-          description: p.description || '',
-          priceSatang: p.priceSatang || null,
-          collection: p.collection?.slug,
-          category: p.category || 'other',
-          material: p.material || null,
-          measurements: p.measurements || {},
-          images: (p.images || []).map(
-            (img: {
-              url: string;
-              width?: number;
-              height?: number;
-              alternativeText?: string;
-              formats?: Record<string, { url: string; width: number }>;
-            }) => ({
-              src: img.url,
-              width: img.width || 1000,
-              height: img.height || 1200,
-              alt: img.alternativeText || p.name,
-              srcSet: [
-                ...Object.values(img.formats || {})
-                  .filter((f) => f.width >= 400)
-                  .map((f) => `${f.url} ${f.width}w`),
-                `${img.url} ${img.width || 1000}w`,
-              ].join(', '),
-            }),
-          ),
-          available:
-            !!variant &&
-            variant.stock - variant.reserved === 1 &&
-            variant.productSlug === p.slug &&
-            Number.isSafeInteger(p.priceSatang) &&
-            (p.priceSatang ?? 0) > 0 &&
-            !preview,
-          published: !!p.publishedAt,
-          reviewState: p.reviewState,
-          postedAt: p.postedAt,
-        };
-      }),
+      products: preview ? catalogProducts : catalogProducts.filter((product) => product.available),
     };
   },
   async checkout(ctx: Context) {

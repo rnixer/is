@@ -15,7 +15,7 @@ export const Route = createFileRoute('/products/$slug')({
   loader: async ({ context, params }) => {
     const catalog = await context.queryClient.ensureQueryData(catalogQuery());
     const product = catalog.products.find((p) => p.slug === params.slug);
-    if (!product) throw notFound();
+    if (!product || (!catalog.preview && !product.available)) throw notFound();
     return { product, catalog };
   },
   head: ({ loaderData }) => productHead(loaderData),
@@ -66,9 +66,7 @@ function Detail() {
           <p className="availability">
             {catalog.preview
               ? 'กำลังรอเจ้าของร้านตรวจสอบ'
-              : p.available
-                ? 'มี 1 ตัว พร้อมให้คุณเลือก'
-                : 'สินค้าชิ้นนี้ไม่พร้อมจำหน่าย'}
+              : 'มี 1 ตัว พร้อมให้คุณเลือก'}
           </p>
           <button
             className="button dark add-bag"
@@ -82,9 +80,7 @@ function Detail() {
               ? 'ADDED TO BAG'
               : catalog.preview
                 ? 'ADD TO BAG · PREVIEW'
-                : !p.available
-                  ? 'UNAVAILABLE'
-                  : 'ADD TO BAG'}
+                : 'ADD TO BAG'}
             <Icon name="bag" />
           </button>
           {added && (

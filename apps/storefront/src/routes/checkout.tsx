@@ -119,7 +119,7 @@ function Checkout() {
             </p>
             {unavailable && (
               <p className="error">
-                มีสินค้าที่ไม่พร้อมจำหน่าย <Link to="/bag">กลับไปแก้ตะกร้า</Link>
+                มีสินค้าที่ถูกเก็บออกจากหน้าร้านแล้ว <Link to="/bag">กลับไปแก้ตะกร้า</Link>
               </p>
             )}
             {error && (
